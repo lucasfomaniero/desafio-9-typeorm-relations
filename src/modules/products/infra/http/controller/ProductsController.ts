@@ -5,6 +5,14 @@ import CreateProductService from '@modules/products/services/CreateProductServic
 
 export default class ProductsController {
   public async create(request: Request, response: Response): Promise<Response> {
-    // TODO
+    const { name, price, quantity } = request.body;
+    try {
+      const createProduct = container.resolve(CreateProductService);
+
+      const products = await createProduct.execute({ name, price, quantity });
+      return response.json(products);
+    } catch (error) {
+      return response.status(400).json('Error while creating the product');
+    }
   }
 }
